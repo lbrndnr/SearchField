@@ -20,14 +20,10 @@ struct ExampleApp: App {
     }
     
     @ViewBuilder private func content() -> some View {
-        var container = AttributeContainer()
-        container.foregroundColor = .blue
-        container.backgroundColor = .green
-        
-        return SearchField("􀊫 Search", text: $query)
+        SearchField("􀊫 Search", text: $query)
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .frame(width: 250)
-            .qualifier("lang", attributes: container)
+            .qualifier("lang", foregroundColor: .accentColor)
     }
     
 }

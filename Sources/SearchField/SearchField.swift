@@ -55,6 +55,19 @@ extension View {
         return modifier(qualifier)
     }
     
+    public func qualifier(_ keyword: String, foregroundColor: Color? = nil, backgroundColor: Color? = nil) -> some View {
+        var attributes = AttributeContainer()
+        attributes.foregroundColor = foregroundColor
+        attributes.backgroundColor = backgroundColor
+        
+        return qualifier(keyword, attributes: attributes)
+    }
+    
+    public func qualifier(_ keyword: String, foregroundColor: Color, backgroundOpacity: Double = 0.2) -> some View {
+        let backgroundColor = foregroundColor.opacity(backgroundOpacity)
+        return qualifier(keyword, foregroundColor: foregroundColor, backgroundColor: backgroundColor)
+    }
+    
 }
 
 extension String {
