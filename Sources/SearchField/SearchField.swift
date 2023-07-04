@@ -8,7 +8,7 @@ public struct SearchField: View {
         var res = AttributedString(text.wrappedValue)
         
         let ranges = qualifiers.values.flatMap { q in
-            let regex = try! NSRegularExpression(pattern: "\(q.keyword):(\\w*)")
+            let regex = try! NSRegularExpression(pattern: "\\b\(q.keyword):(\\w*)")
             let range = NSRange(location: 0, length: text.wrappedValue.count)
             let matches = regex.matches(in: text.wrappedValue, range: range)
             
