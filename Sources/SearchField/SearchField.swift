@@ -28,15 +28,32 @@ public struct SearchField: View {
     }
     
     @Environment(\.qualifiers) private var qualifiers
+    
+    @State private var textWidth: CGFloat = 0
 
     public var body: some View {
-        ZStack(alignment: .leading) {
+        GeometryReader { geo in
             TextField(title, text: text)
                 .foregroundColor(.clear)
-//                .foregroundColor(.green)
-            Text(attributedText)
-//                .background(.green)
-                .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                .overlay(alignment: geo.size.width > textWidth ? .leading : .trailing) {
+                    Text(attributedText)
+                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                        .lineLimit(1)
+                        .truncationMode(.head)
+                        .fixedSize()
+                        .background(sizeBackground())
+                }
+                .clipped()
+        }
+        .fixedSize(horizontal: false, vertical: true)
+    }
+    
+    @ViewBuilder private func sizeBackground() -> some View {
+        GeometryReader { geo in
+            Color.clear
+                .onChange(of: geo.size) { newValue in
+                    textWidth = newValue.width
+                }
             
         }
     }
@@ -91,13 +108,11 @@ struct MainView_Previews: PreviewProvider {
     @State static private var searchQuery = "lang:Swift author:lbrndnr"
     
     static var previews: some View {
-        var container = AttributeContainer()
-        container.foregroundColor = .blue
-        
-        return SearchField("􀊫 Search", text: $searchQuery)
+        SearchField("􀊫 Search", text: $searchQuery)
             .textFieldStyle(RoundedBorderTextFieldStyle())
             .frame(width: 250)
-            .qualifier("lang", attributes: container)
+            .qualifier("lang", foregroundColor: .blue)
+            .qualifier("author", foregroundColor: .green)
     }
     
 }
