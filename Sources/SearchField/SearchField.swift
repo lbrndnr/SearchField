@@ -29,30 +29,32 @@ public struct SearchField: View {
     
     @Environment(\.qualifiers) private var qualifiers
     
+    @State private var textFieldWidth: CGFloat = 1
     @State private var textWidth: CGFloat = 0
 
     public var body: some View {
-        GeometryReader { geo in
-            TextField(title, text: text)
-                .foregroundColor(.clear)
-                .overlay(alignment: geo.size.width > textWidth ? .leading : .trailing) {
-                    Text(attributedText)
-                        .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
-                        .lineLimit(1)
-                        .truncationMode(.head)
-                        .fixedSize()
-                        .background(sizeBackground())
-                }
-                .clipped()
-        }
-        .fixedSize(horizontal: false, vertical: true)
+        TextField(title, text: text)
+            .foregroundColor(.clear)
+            .overlay(alignment: textFieldWidth > textWidth ? .leading : .trailing) {
+                Text(attributedText)
+                    .padding(EdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10))
+                    .lineLimit(1)
+                    .truncationMode(.head)
+                    .fixedSize()
+                    .background(widthBinding($textWidth))
+            }
+            .background(widthBinding($textFieldWidth))
+            .clipped()
     }
     
-    @ViewBuilder private func sizeBackground() -> some View {
+    @ViewBuilder private func widthBinding(_ binding: Binding<CGFloat>) -> some View {
         GeometryReader { geo in
             Color.clear
                 .onChange(of: geo.size) { newValue in
-                    textWidth = newValue.width
+                    binding.wrappedValue = newValue.width
+                }
+                .onAppear {
+                    binding.wrappedValue = geo.size.width
                 }
             
         }
