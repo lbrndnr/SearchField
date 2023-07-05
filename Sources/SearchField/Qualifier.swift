@@ -22,7 +22,7 @@ extension EnvironmentValues {
     
 }
 
-public struct Qualifier {
+struct Qualifier {
     
     public var keyword: String
     public var attributes: AttributeContainer
